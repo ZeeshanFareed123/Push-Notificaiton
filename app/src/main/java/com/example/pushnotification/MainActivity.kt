@@ -16,13 +16,7 @@ class MainActivity : AppCompatActivity() {
 
       //  throw RuntimeException("Test Crash") // Force a crash
 
-        /*FirebaseMessaging.getInstance().subscribeToTopic("weather")
-            .addOnCompleteListener { task ->
-                var msg = "Successful"
-                if (!task.isSuccessful) {
-                    msg = "Failed"
-                }
-                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-            }*/
+        FirebaseMessaging.getInstance().subscribeToTopic("weather")
+
     }
 }

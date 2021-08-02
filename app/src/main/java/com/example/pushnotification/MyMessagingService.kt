@@ -16,18 +16,19 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import java.util.stream.DoubleStream.builder
 import java.util.stream.Stream.builder
+import kotlin.random.Random
 
 class MyMessagingService : FirebaseMessagingService() {
 
 
     private val TAG = "FireBaseMessagingService"
     var NOTIFICATION_CHANNEL_ID = "net.larntech.notification"
-    val NOTIFICATION_ID = 100
+    val NOTIFICATION_ID = Random.nextInt()
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
-        Log.e("message","Message Received ...");
+        Log.d("message","Message Received ...");
 
         if (remoteMessage.data.isNotEmpty()) {
             val title = remoteMessage.data["title"]
@@ -41,9 +42,9 @@ class MyMessagingService : FirebaseMessagingService() {
     }
 
 
-    override fun onNewToken(p0: String) {
-        super.onNewToken(p0)
-        Log.e("token","New Token")
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
+        Log.d("token1","New Token: "+ token)
     }
 
 
@@ -63,16 +64,17 @@ class MyMessagingService : FirebaseMessagingService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //Log.e("Notification", "Created in up to orio OS device");
             notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-                .setOngoing(true)
+              //  .setOngoing(true)
                 .setSmallIcon(getNotificationIcon())
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setContentIntent(pi)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(Notification.CATEGORY_SERVICE)
-                .setWhen(System.currentTimeMillis())
+             //   .setPriority(NotificationCompat.PRIORITY_HIGH)
+            //    .setCategory(Notification.CATEGORY_SERVICE)
+            //    .setWhen(System.currentTimeMillis())
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setContentTitle(title).build()
+
             val notificationManager = context.getSystemService(
                 Context.NOTIFICATION_SERVICE
             ) as NotificationManager
@@ -83,6 +85,7 @@ class MyMessagingService : FirebaseMessagingService() {
             )
             notificationManager.createNotificationChannel(notificationChannel)
             notificationManager.notify(NOTIFICATION_ID, notification)
+         //   notificationManager.cancel(NOTIFICATION_ID)
         } else {
             notification = NotificationCompat.Builder(context)
                 .setSmallIcon(getNotificationIcon())
@@ -101,7 +104,7 @@ class MyMessagingService : FirebaseMessagingService() {
     private fun getNotificationIcon(): Int {
         val useWhiteIcon =
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-        return if (useWhiteIcon) R.mipmap.ic_launcher else R.mipmap.ic_launcher
+        return if (useWhiteIcon) R.drawable.app_logo else R.drawable.app_logo
     }
 
 }
